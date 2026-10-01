@@ -1,0 +1,599 @@
+<!-- ARQUIVO MESTRE v3 -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal Escolar - Conteúdos da Semana</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    background-color: #f8fafc;
+    color: #0f172a;
+  }
+
+  /* Faixa com o gradiente do arco-íris da Bandeira de Pernambuco */
+  .pe-flag-stripe {
+    height: 6px;
+    background: linear-gradient(90deg, #dc2626 0%, #f59e0b 33%, #16a34a 66%, #1d4ed8 100%);
+    width: 100%;
+  }
+
+  /* Header / Boas-vindas - Inspirado na metade superior azul marinho */
+  header {
+    background-color: #0b2351;
+    color: #ffffff;
+    padding: 32px 16px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(11, 35, 81, 0.15);
+  }
+  .header-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  header h1 {
+    font-size: 28px;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  header p {
+    font-size: 18px;
+    opacity: 0.95;
+    margin-bottom: 16px;
+  }
+  .week-badge {
+    display: inline-block;
+    background-color: #fef3c7;
+    color: #78350f;
+    font-weight: 700;
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid #f59e0b;
+  }
+
+  /* Layout principal */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+
+  /* Seções */
+  section {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border-top: 4px solid #0b2351;
+  }
+
+  section h2 {
+    font-size: 22px;
+    color: #0b2351;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Filtros de Matéria */
+  .filter-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  .filter-btn {
+    min-height: 48px;
+    padding: 8px 14px;
+    font-size: 15px;
+    font-weight: 600;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #1e293b;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  .filter-btn:hover, .filter-btn:focus {
+    border-color: #0b2351;
+    color: #0b2351;
+    outline: none;
+  }
+  .filter-btn.active {
+    background-color: #0b2351;
+    color: #ffffff;
+    border-color: #0b2351;
+  }
+
+  /* Cards de Conteúdo com destaque em amarelo solar */
+  .grid-cards {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  @media (min-width: 640px) {
+    .grid-cards { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .card {
+    border: 1px solid #cbd5e1;
+    border-radius: 12px;
+    padding: 16px;
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-left: 4px solid #f59e0b;
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+  .subject-tag {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #0b2351;
+    background-color: #e0e7ff;
+    padding: 4px 8px;
+    border-radius: 6px;
+  }
+  .card h3 {
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: #0f172a;
+  }
+  .card p {
+    font-size: 15px;
+    color: #334155;
+    margin-bottom: 12px;
+  }
+
+  /* Mural de Prazos - Destaque em Vermelho da Cruz de Pernambuco */
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .timeline-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    background: #f8fafc;
+    border-left: 6px solid #dc2626;
+    border-radius: 8px;
+    gap: 12px;
+  }
+  .timeline-info h4 {
+    font-size: 17px;
+    color: #0f172a;
+  }
+  .timeline-info p {
+    font-size: 15px;
+    color: #475569;
+  }
+  .date-badge {
+    background-color: #fef2f2;
+    color: #991b1b;
+    font-weight: 700;
+    font-size: 15px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    white-space: nowrap;
+    border: 1px solid #fca5a5;
+  }
+
+  /* Lista de Materiais */
+  .material-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .material-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background: #ffffff;
+    gap: 12px;
+  }
+  .btn-download {
+    min-height: 48px;
+    padding: 0 16px;
+    font-size: 16px;
+    font-weight: 600;
+    background-color: #0b2351;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+  }
+  .btn-download:hover, .btn-download:focus {
+    background-color: #1d4ed8;
+    outline: none;
+  }
+
+  /* Seção Dúvidas com tom verde esperança */
+  .help-box {
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 12px;
+    padding: 16px;
+  }
+
+  /* Rodapé */
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 15px;
+    color: #64748b;
+    border-top: 1px solid #e2e8f0;
+    margin-top: 32px;
+    background-color: #ffffff;
+  }
+</style>
+</head>
+<body>
+
+<div class="pe-flag-stripe"></div>
+
+<header>
+  <div class="header-container">
+    <h1>🌈 Portal de Conteúdos da Semana</h1>
+    <p>Perdeu alguma aula? Consulte aqui os resumos, tarefas e prazos da sua turma.</p>
+    <span class="week-badge">☀️ Semana Atual: 13 a 17 de Outubro</span>
+  </div>
+</header>
+
+<main>
+
+  <!-- BLOCO 1: Conteúdos e Revisões -->
+  <section id="conteudos">
+    <h2>📖 Conteúdos e Revisões da Semana</h2>
+    <p style="margin-bottom: 16px; color: #475569;">Filtre pelas matérias da turma para ver os resumos das aulas:</p>
+    
+    <div class="filter-bar">
+      <button class="filter-btn active" onclick="filterSubject('todas', this)">Todas</button>
+      <button class="filter-btn" onclick="filterSubject('artes', this)">Artes</button>
+      <button class="filter-btn" onclick="filterSubject('biologia', this)">Biologia</button>
+      <button class="filter-btn" onclick="filterSubject('cultura-digital', this)">Cultura Digital e Mediática</button>
+      <button class="filter-btn" onclick="filterSubject('educacao-fisica', this)">Educação Física</button>
+      <button class="filter-btn" onclick="filterSubject('filosofia', this)">Filosofia</button>
+      <button class="filter-btn" onclick="filterSubject('fisica', this)">Física</button>
+      <button class="filter-btn" onclick="filterSubject('geografia', this)">Geografia</button>
+      <button class="filter-btn" onclick="filterSubject('historia', this)">História</button>
+      <button class="filter-btn" onclick="filterSubject('ingles', this)">Inglês</button>
+      <button class="filter-btn" onclick="filterSubject('letramento', this)">Letramento Linguístico</button>
+      <button class="filter-btn" onclick="filterSubject('matematica', this)">Matemática</button>
+      <button class="filter-btn" onclick="filterSubject('matematica-basica', this)">Matemática Básica</button>
+      <button class="filter-btn" onclick="filterSubject('portugues', this)">Português</button>
+      <button class="filter-btn" onclick="filterSubject('producao-textual', this)">Produção Textual</button>
+      <button class="filter-btn" onclick="filterSubject('projeto-de-vida', this)">Projeto de Vida</button>
+      <button class="filter-btn" onclick="filterSubject('quimica', this)">Química</button>
+      <button class="filter-btn" onclick="filterSubject('sociologia', this)">Sociologia</button>
+    </div>
+
+    <div class="grid-cards">
+      <!-- ARTES -->
+      <div class="card" data-subject="artes">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Artes</span>
+            <small style="color: #64748b;">Segunda-feira</small>
+          </div>
+          <h3>Vanguardas Europeias</h3>
+          <p>Análise do Modernismo e as rupturas com a arte acadêmica tradicional no início do século XX.</p>
+        </div>
+      </div>
+
+      <!-- BIOLOGIA -->
+      <div class="card" data-subject="biologia">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Biologia</span>
+            <small style="color: #64748b;">Quinta-feira</small>
+          </div>
+          <h3>Estruturas Celulares</h3>
+          <p>Diferenças entre células eucarióticas e procarióticas. Organelas celulares e suas funções principais.</p>
+        </div>
+      </div>
+
+      <!-- CULTURA DIGITAL E MEDIÁTICA -->
+      <div class="card" data-subject="cultura-digital">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Cultura Digital</span>
+            <small style="color: #64748b;">Quarta-feira</small>
+          </div>
+          <h3>Cibersegurança e Pegada Digital</h3>
+          <p>Identificação de notícias falsas (fake news) e diretrizes para o uso seguro e ético de dados na internet.</p>
+        </div>
+      </div>
+
+      <!-- EDUCAÇÃO FÍSICA -->
+      <div class="card" data-subject="educacao-fisica">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Educação Física</span>
+            <small style="color: #64748b;">Sexta-feira</small>
+          </div>
+          <h3>Esportes de Invasão e Táticas</h3>
+          <p>Discussão sobre cooperação, estratégias defensivas e ofensivas nos esportes coletivos.</p>
+        </div>
+      </div>
+
+      <!-- FILOSOFIA -->
+      <div class="card" data-subject="filosofia">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Filosofia</span>
+            <small style="color: #64748b;">Terça-feira</small>
+          </div>
+          <h3>Mito e Razão na Grécia Antiga</h3>
+          <p>A transição do pensamento mítico para o pensamento filosófico racional com os filósofos Pré-Socráticos.</p>
+        </div>
+      </div>
+
+      <!-- FÍSICA -->
+      <div class="card" data-subject="fisica">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Física</span>
+            <small style="color: #64748b;">Quinta-feira</small>
+          </div>
+          <h3>Cinemática Escalar</h3>
+          <p>Conceitos de deslocamento, velocidade média e aceleração no Movimento Uniforme (MU) e MUV.</p>
+        </div>
+      </div>
+
+      <!-- GEOGRAFIA -->
+      <div class="card" data-subject="geografia">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Geografia</span>
+            <small style="color: #64748b;">Quarta-feira</small>
+          </div>
+          <h3>Globalização e Blocos Econômicos</h3>
+          <p>A integração dos mercados globais, redes de transporte, comunicação e fluxos migratórios atuais.</p>
+        </div>
+      </div>
+
+      <!-- HISTÓRIA -->
+      <div class="card" data-subject="historia">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">História</span>
+            <small style="color: #64748b;">Terça-feira</small>
+          </div>
+          <h3>Revolução Industrial</h3>
+          <p>Análise da Primeira Revolução Industrial, surgimento das fábricas e impactos sociais nas cidades europeias.</p>
+        </div>
+      </div>
+
+      <!-- INGLÊS -->
+      <div class="card" data-subject="ingles">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Inglês</span>
+            <small style="color: #64748b;">Segunda-feira</small>
+          </div>
+          <h3>Reading Comprehension & Verb Tenses</h3>
+          <p>Técnicas de leitura instrumental (Skimming e Scanning) e uso prático do Present Perfect.</p>
+        </div>
+      </div>
+
+      <!-- LETRAMENTO LINGUÍSTICO -->
+      <div class="card" data-subject="letramento">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Letramento Ling.</span>
+            <small style="color: #64748b;">Sexta-feira</small>
+          </div>
+          <h3>Análise de Gêneros Textuais</h3>
+          <p>Estudo da função social e dos recursos linguísticos em textos multimodais e mídias sociais.</p>
+        </div>
+      </div>
+
+      <!-- MATEMÁTICA -->
+      <div class="card" data-subject="matematica">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Matemática</span>
+            <small style="color: #64748b;">Quarta-feira</small>
+          </div>
+          <h3>Função Quadrática (2º Grau)</h3>
+          <p>Cálculo de vértices, raízes da função (Fórmula de Bhaskara) e interpretação do gráfico da parábola.</p>
+        </div>
+      </div>
+
+      <!-- MATEMÁTICA BÁSICA -->
+      <div class="card" data-subject="matematica-basica">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Mat. Básica</span>
+            <small style="color: #64748b;">Segunda-feira</small>
+          </div>
+          <h3>Razão, Proporção e Regra de Três</h3>
+          <p>Resolução de problemas práticos de proporcionalidade direta e inversa aplicados ao dia a dia.</p>
+        </div>
+      </div>
+
+      <!-- PORTUGUÊS -->
+      <div class="card" data-subject="portugues">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Português</span>
+            <small style="color: #64748b;">Sexta-feira</small>
+          </div>
+          <h3>Coesão e Coerência Textual</h3>
+          <p>Uso dos conectivos no texto dissertativo-argumentativo e estratégias para evitar repetições no texto.</p>
+        </div>
+      </div>
+
+      <!-- PRODUÇÃO TEXTUAL -->
+      <div class="card" data-subject="producao-textual">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Produção Textual</span>
+            <small style="color: #64748b;">Terça-feira</small>
+          </div>
+          <h3>Estrutura da Redação Escolar</h3>
+          <p>Construção do projeto de texto: introdução com tese, desenvolvimento argumentativo e proposta de intervenção.</p>
+        </div>
+      </div>
+
+      <!-- PROJETO DE VIDA -->
+      <div class="card" data-subject="projeto-de-vida">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Projeto de Vida</span>
+            <small style="color: #64748b;">Quinta-feira</small>
+          </div>
+          <h3>Planejamento de Metas e Estudos</h3>
+          <p>Desenvolvimento de rotinas de estudo eficazes, gestão do tempo e definição de metas acadêmicas.</p>
+        </div>
+      </div>
+
+      <!-- QUÍMICA -->
+      <div class="card" data-subject="quimica">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Química</span>
+            <small style="color: #64748b;">Quarta-feira</small>
+          </div>
+          <h3>Tabela Periódica e Ligações</h3>
+          <p>Propriedades periódicas dos elementos, ligações iônicas, covalentes e metálicas.</p>
+        </div>
+      </div>
+
+      <!-- SOCIOLOGIA -->
+      <div class="card" data-subject="sociologia">
+        <div>
+          <div class="card-header">
+            <span class="subject-tag">Sociologia</span>
+            <small style="color: #64748b;">Segunda-feira</small>
+          </div>
+          <h3>Cidadania e Direitos Humanos</h3>
+          <p>Evolução histórica dos direitos civis, políticos e sociais e a importância da participação cidadã.</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- BLOCO 2: Mural de Prazos e Datas -->
+  <section id="prazos">
+    <h2>📅 Mural de Prazos e Entregas</h2>
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-info">
+          <h4>🧪 Maquete sobre Células (Biologia)</h4>
+          <p>Trabalho em grupo sobre organelas celulares.</p>
+        </div>
+        <span class="date-badge">Prazo: 20/10</span>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-info">
+          <h4>📝 Lista de Exercícios: Função (Matemática)</h4>
+          <p>Entrega dos exercícios 1 ao 15 da página 88.</p>
+        </div>
+        <span class="date-badge">Prazo: 22/10</span>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-info">
+          <h4>📜 Redação Dissertativa (Produção Textual / Português)</h4>
+          <p>Tema: "Impactos da tecnologia na educação contemporânea".</p>
+        </div>
+        <span class="date-badge">Prazo: 25/10</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOCO 3: Materiais de Apoio -->
+  <section id="materiais">
+    <h2>📥 Materiais de Apoio e Slides</h2>
+    <ul class="material-list">
+      <li class="material-item">
+        <div>
+          <strong>Slide: Revolução Industrial (PDF)</strong>
+          <p style="font-size: 14px; color: #64748b;">Apresentação usada na aula de História</p>
+        </div>
+        <button class="btn-download" onclick="alert('Baixando material de História...')">Baixar PDF</button>
+      </li>
+      <li class="material-item">
+        <div>
+          <strong>Lista de Exercícios de Matemática (PDF)</strong>
+          <p style="font-size: 14px; color: #64748b;">Gabarito e questões para praticar</p>
+        </div>
+        <button class="btn-download" onclick="alert('Baixando lista de Matemática...')">Baixar PDF</button>
+      </li>
+      <li class="material-item">
+        <div>
+          <strong>Guia de Redação e Conectivos (PDF)</strong>
+          <p style="font-size: 14px; color: #64748b;">Material de apoio para Produção Textual</p>
+        </div>
+        <button class="btn-download" onclick="alert('Baixando guia de Redação...')">Baixar PDF</button>
+      </li>
+    </ul>
+  </section>
+
+  <!-- BLOCO 4: Dúvidas e Ajuda -->
+  <section id="duvidas">
+    <h2>💬 Dúvidas ou Aulas Perdidas?</h2>
+    <div class="help-box">
+      <p style="margin-bottom: 8px;"><strong>Representantes e Monitores da Turma:</strong></p>
+      <p style="font-size: 15px; color: #334155; margin-bottom: 12px;">Se precisar dos cadernos completos das aulas passadas ou tirar dúvidas sobre trabalhos, fale com o monitor da sua turma no intervalo ou envie uma mensagem no grupo oficial da sala.</p>
+      <button class="btn-download" style="background-color: #16a34a;" onclick="alert('Mensagem enviada para o monitor responsável!')">Falar com Monitor da Turma</button>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Portal de Apoio Escolar • Desenvolvido para ajudar todos os alunos a ficarem em dia com as matérias.</p>
+</footer>
+
+<script>
+function filterSubject(subject, btn) {
+  const buttons = document.querySelectorAll('.filter-btn');
+  buttons.forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const cards = document.querySelectorAll('.card');
+  cards.forEach(card => {
+    if (subject === 'todas' || card.getAttribute('data-subject') === subject) {
+      card.style.display = 'flex';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>
